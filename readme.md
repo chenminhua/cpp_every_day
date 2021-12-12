@@ -70,13 +70,97 @@ price.id_num;
 enum {red, orange, yellow, green, blue, violet, indigo, ultraviolet};
 ```
 
-### 指针
+# 指针
 
 c++中创建指针时，计算机将分配用来存储地址的内存，但不会分配用来存储指针指向的数据的内存。**记住在对指针应用解引用操作前，一定要将指针初始化为一个确定的地址。**下面这段代码非常危险。
 
 ```cpp
 long * p;
 *p = 23333 // p确实是一个指针，但是并不知道其会执行哪里，这时候进行解引用操作和赋值操作非常危险。
+```
+
+```c
+int x = 1, y = 2, z[10];
+int * ip       // ip 是一个指向int的指针
+ip = &x;       // ip 现在指向x
+y = *ip;        // y = 1
+*ip = 0;        // x = 0
+ip = &z[0];     // ip现在指向z[0]
+
+void * vp    // 可以指向任意类型的指针
+void swap(int *px, int *py)   // 指针参数使得我们可以在函数中访问和改变对象
+```
+
+### 指针与数组
+```c
+int a[10];
+int *pa;
+pa = &a[0];    // 等价于 pa = a
+int a1 = *(pa+1)   // a[i] 等价于 *(a+i)，事实上c就是把 a[i] 转换成 *(a+i)
+```
+数组名和指针很类似，但是它们之间有一个区别，指针是一个变量，但数组名不是。
+在作为函数的参数时，数组和指针是等价的，但一般用指针更好（更清晰）,如下：
+
+```c
+int strlen(char *s) {...}
+
+strlen("hello, world");   // 传入字符串合法
+strlen(array);            // 传入char数组合法
+strlen(ptr);              // 传入char指针合法
+```
+
+### 指向函数
+```cpp
+void estimate(int lines, double(*pf)(int)) {
+        cout << (*pf) (lines) << endl;
+}
+
+double pam(int lns) {
+        return 0.03 * lns + 0.0004 * lns * lns;
+}
+
+estimate(12, pam);
+```
+
+### const int * （指向const的指针）
+```c
+int a1 = 1;
+int a2 = 3;
+const int * p = &a1;
+printf("%p: %d\n", p, *p);
+p = &a2;                  // 合法，指针可以指向其他地方
+printf("%p: %d\n", p, *p);
+*p = 3;   // 报错，指针指向的值不能改变
+```
+
+### int* const  （const指针）
+```c
+int a = 1;
+int b = 2;
+int* const p = &a;
+*p = 3;     // 合法, 指针的值可以改变
+p = &b;     // 报错，指针不能指向其他地方
+```
+
+### const int* const
+指针不能指向其他地方，指针的指向的值也不能改变
+
+### string (char *)
+c语言里面处理字符串非常糟糕，还好string.h里面定义了很多方法
+
+```c
+// c里面复制字符串需要使用strcpy函数
+void strcpy(char *s, const char *t) {
+  while(*s++ = *t++);
+}
+
+// c里面的字符串比较strcmp
+int strcmp(char *s, char *t) {
+  for (; *s == *t; s++; t++) {
+    if (*s == '\0') return 0;
+  }
+  return *s - *t
+}
 ```
 
 ### 引用
