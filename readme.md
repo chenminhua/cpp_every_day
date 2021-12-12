@@ -4,7 +4,7 @@
 - 数组名可以理解为指向数组第一个元素的指针。
 - 数组名和指针的区别在于，sizeof(数组名) 返回整个数组的长度（单位为字节）。
 - stack[1]表达式在编译器看来就是 \*(stack+1)
-- 将数组名与指针对应是一件好事，因为将数组地址作为参数传递可以节省复制整个数组所需的时间和内存。
+- 将数组名与指针对应，可以在将数组地址作为参数传递时节省复制数组所需资源。
 - 使用数组声明来创建数组时，采用静态联编，数组的长度在编译时设置。
 - 使用 new[] 来创建数组时，采用动态联编，在运行时为数组分配空间，其长度也将在运行时设置。需要使用 delete[] 释放其占用的内存。
 - 为了防止函数无意中修改数组内容，可以在声明形参时使用关键字 const。这意味着不能使用 arr 来修改该数据。
@@ -15,8 +15,8 @@ void show_array(const double arr[], int n);
 
 ### string
 
-- c++处理字符串有两种方式。第一种是 c-style string,第二种是基于 string 类库的方法。
-- c++的 string 把我们从 char*中拯救了出来，比如，比较 char*需要使用 strcmp() 方法，而比较 string 字符串只需要 ==。
+- c++处理字符串：一种是 c-style string,第二种是基于 string 类库的方法。
+- c++的 string 把我们从 char\*中拯救了出来，比如，比较 char\*需要使用 strcmp() 方法，而比较 string 字符串只需要 ==。
 - 拼接 string 也只需要使用 + 操作符。使用 string 类库需要 include string.h
 
 ### struct
@@ -45,11 +45,6 @@ union one4all {
   long long_val;
   double double_val;
 }
-
-// 声明
-one4all pail;
-one4all.int_val = 5;   // one4all存下5
-one4all.double_val = 1.38;   // one4all改存1.38
 ```
 
 也可以使用匿名 union
@@ -71,7 +66,9 @@ price.id_num;
 
 ### enum
 
+```cpp
 enum {red, orange, yellow, green, blue, violet, indigo, ultraviolet};
+```
 
 ### 指针
 
