@@ -1,6 +1,7 @@
 ## 类型系统
 
 ### 数组
+
 - 数组名可以理解为指向数组第一个元素的指针。
 - 数组名和指针的区别在于，sizeof(数组名) 返回整个数组的长度（单位为字节）。
 - stack[1]表达式在编译器看来就是 \*(stack+1)
@@ -92,12 +93,14 @@ void swap(int *px, int *py)   // 指针参数使得我们可以在函数中访�
 ```
 
 ### 指针与数组
+
 ```c
 int a[10];
 int *pa;
 pa = &a[0];    // 等价于 pa = a
 int a1 = *(pa+1)   // a[i] 等价于 *(a+i)，事实上c就是把 a[i] 转换成 *(a+i)
 ```
+
 数组名和指针很类似，但是它们之间有一个区别，指针是一个变量，但数组名不是。
 在作为函数的参数时，数组和指针是等价的，但一般用指针更好（更清晰）,如下：
 
@@ -110,6 +113,7 @@ strlen(ptr);              // 传入char指针合法
 ```
 
 ### 指向函数
+
 ```cpp
 void estimate(int lines, double(*pf)(int)) {
         cout << (*pf) (lines) << endl;
@@ -122,7 +126,8 @@ double pam(int lns) {
 estimate(12, pam);
 ```
 
-### const int * （指向const的指针）
+### const int \* （指向 const 的指针）
+
 ```c
 int a1 = 1;
 int a2 = 3;
@@ -133,7 +138,8 @@ printf("%p: %d\n", p, *p);
 *p = 3;   // 报错，指针指向的值不能改变
 ```
 
-### int* const  （const指针）
+### int\* const （const 指针）
+
 ```c
 int a = 1;
 int b = 2;
@@ -142,11 +148,13 @@ int* const p = &a;
 p = &b;     // 报错，指针不能指向其他地方
 ```
 
-### const int* const
+### const int\* const
+
 指针不能指向其他地方，指针的指向的值也不能改变
 
-### string (char *)
-c语言里面处理字符串非常糟糕，还好string.h里面定义了很多方法
+### string (char \*)
+
+c 语言里面处理字符串非常糟糕，还好 string.h 里面定义了很多方法
 
 ```c
 // c里面复制字符串需要使用strcpy函数
@@ -188,6 +196,79 @@ void swap(int & a, int & b) {
 **将类对象传递给函数时，c++通常的做法是使用引用。**
 
 继承的一个特征是，一个基类的引用可以指向派生类对象，而无需进行强制类型转换。因此可以定义一个接受基类引用作为参数的函数，在调用该函数的时候可以将基类或派生类的对象作为参数。比如 ostream & 可以接受 ostream 对象和 ofstream 对象。这就是多态啦。
+
+## auto 类型推导
+
+c++11 中使用 auto 实现类型推导，c++98 中使用 auto 表示变量为自动变量（现在已经废除）
+
+## lambda 表达式
+
+在 c++11 之后可以使用。 （编译时使用-std=c++11）
+
+```c++
+int a[6] = {9,8,2,3,5,4};
+std::sort( a, &a[6], [](int x, int y){ return x < y;  }  );
+for (int i=0; i<6; i++)
+    cout << a[i] << ",";
+```
+
+## 右值引用
+
+C++中所有的表达式和变量要么是左值，要么是右值。通俗的左值的定义就是非临时对象，那些可以在多条语句中使用的对象。所有的变量都满足这个定义，在多条代码中都可以使用，都是左值。右值是指临时的对象，它们只在当前的语句中有效。
+
+如果临时对象通过一个接受右值的函数传递给另一个函数时，就会变成左值，因为这个临时对象在传递过程中，变成了命名对象。
+
+右值引用是用来转移语义的。通过转移语义，临时对象中的资源可以转移到其他对象中。
+
+如果已知一个命名对象不再被使用而想对它调用转移构造函数，可以使用 std::move 函数，把左值引用变成右值引用。
+
+```cpp
+// 接收左值
+void process_value(int &i)
+{
+    cout << "LValue processed: " << i << endl;
+}
+
+// 接收右值
+void process_value(int &&i)
+{
+    cout << "RValue processed: " << i << endl;
+}
+
+// 转发，临时对象在此过程中，由右值变成了左值。
+void forward_value(int &&i)
+{
+    process_value(i);
+}
+
+// 通过Move减少了三次不必要的拷贝
+template <typename T>
+void swapit(T &a, T &b)
+{
+    T tmp(move(a));
+    a = move(b);
+    b = move(tmp);
+}
+
+int main()
+{
+    int a = 0;
+    process_value(a);
+    process_value(1);
+    process_value(2);
+    int x = 10;
+    int y = 20;
+    cout << "x=" << x << "  y=" << y << endl;
+    swapit(x, y);
+    cout << "x=" << x << "  y=" << y << endl;
+}
+
+// LValue processed: 0
+// RValue processed: 1
+// RValue processed: 2
+// x=10  y=20
+// x=20  y=10
+```
 
 ## 连接器
 
