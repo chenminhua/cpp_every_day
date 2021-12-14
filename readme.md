@@ -1,4 +1,4 @@
-## c++ 组成
+# c++ 组成
 - c: blocks, statements, preprocessor, pointers
 - 面向对象 c++: class, 封装，继承，多态，virtual 函数（动态绑定）
 - template c++: 泛型编程
@@ -8,9 +8,9 @@
 
 [google cpp style guide](https://google.github.io/styleguide/cppguide.html)
 
-## 类型系统
+# 类型
 
-### 类型别名
+## 类型别名
 
 ```cpp
 #define BYTE char  // 预处理器，预编译阶段替换，无脑替换
@@ -23,7 +23,7 @@ using FP = void (*) (int, const std::string&);
 // 等价于 typedef void (*FP) (int, const std::string&);
 ```
 
-### 数组
+## 数组
 
 - 数组名可以理解为指向数组第一个元素的指针。
 - 数组名和指针的区别在于，sizeof(数组名) 返回整个数组的长度（单位为字节）。
@@ -37,13 +37,13 @@ using FP = void (*) (int, const std::string&);
 void show_array(const double arr[], int n);
 ```
 
-### string
+## string
 
 - c++处理字符串：一种是 c-style string,第二种是基于 string 类库的方法。
 - c++的 string 把我们从 char\*中拯救了出来，比如，比较 char\*需要使用 strcmp() 方法，而比较 string 字符串只需要 ==。
 - 拼接 string 也只需要使用 + 操作符。使用 string 类库需要 include string.h
 
-### struct
+## struct
 
 ```c
 typedef struct Person {
@@ -58,7 +58,7 @@ Person people[100];
 
 如果你有一个指针 p, 则毫不犹豫地使用 p->field。如果你在处理一个值 v,则使用 v.field
 
-### union
+## union
 
 union 的用途之一是，当数据项使用两种或更多格式时，可以节省空间。如下，one4all 类型的变量中，同时只能存下一个 int 或者 long 或者 double
 
@@ -88,7 +88,7 @@ widget price;
 price.id_num;
 ```
 
-### enum
+## enum
 
 ```cpp
 enum {red, orange, yellow, green, blue, violet, indigo, ultraviolet};
@@ -96,7 +96,7 @@ enum {red, orange, yellow, green, blue, violet, indigo, ultraviolet};
 
 # 指针
 
-c++中创建指针时，计算机将分配用来存储地址的内存，但不会分配用来存储指针指向的数据的内存。**记住在对指针应用解引用操作前，一定要将指针初始化为一个确定的地址。**下面这段代码非常危险。
+**记住在对指针应用解引用操作前，一定要将指针初始化为一个确定的地址。**下面这段代码非常危险。
 
 ```cpp
 long * p;
@@ -194,7 +194,7 @@ int strcmp(char *s, char *t) {
 }
 ```
 
-### 引用
+# 引用
 
 引用是已定义的变量的别名。引用变量的主要用途是用作函数的形参。通过将引用变量用作参数，函数将使用原始数据，而不是其拷贝。
 
@@ -220,7 +220,7 @@ void swap(int & a, int & b) {
 
 继承的一个特征是，一个基类的引用可以指向派生类对象，而无需进行强制类型转换。因此可以定义一个接受基类引用作为参数的函数，在调用该函数的时候可以将基类或派生类的对象作为参数。比如 ostream & 可以接受 ostream 对象和 ofstream 对象。这就是多态啦。
 
-## 内存管理
+# 内存管理
 
 malloc 返回一个空指针，用于分配内存。比如开辟一块内存给一个数组，这个数组可以放入 howMany 个 int 数。free 用于释放内存。
 
@@ -235,7 +235,7 @@ free(ptr);
 静态存储：整个程序执行期间都存在。使变量称为静态的方式有两种：1.static关键字，2.在函数外定义它。
 动态存储：new, delete
 
-### new and delete
+## new and delete
 使用new请求正确数量的内存，返回指向该块内存的指针。使用指针来跟踪内存的位子，使用delete释放使用new分配的内存。在c中我们需要使用malloc和free来处理内存的分配和回收
 
 ```c
@@ -262,6 +262,8 @@ virtual void funtion1()=0
 ### Explicit 指定符
 
 修饰构造函数，被修饰的类不能发生隐式类型转换
+
+# cpp 11
 ## auto 类型推导
 
 c++11 中使用 auto 实现类型推导，c++98 中使用 auto 表示变量为自动变量（现在已经废除）
@@ -334,11 +336,6 @@ int main()
 // x=10  y=20
 // x=20  y=10
 ```
-
-## 连接器
-
-源程序分开单独编译，然后在恰当的时候整合到一起。
-典型的连接器把由编译器和汇编器生产的若干模块整合成一个被称为载入模块或可执行文件的实体，该实体能被操作系统直接执行。
 
 # oop
 ### 构造函数
@@ -497,3 +494,45 @@ std::ostream & operator<< (std::ostream & os, const Time & t) {
 
 ### 动态内存分配
 让程序在运行时决定内存分配，而不是在编译时决定。这样可以根据需要来使用内存。但是在类中使用new，delete操作符会导致许多编程问题。析构函数将变得必不可少（需要在析构函数中释放内存）
+
+# boost
+TR1是一份规范，描述加入c++标准程序库的诸多新机能。
+boost是个组织，也是一个网站 http://boost.org, 提供开放的c++程序库。
+
+# template
+Bjarne 在《The Design and Evolution of C++》一书中，详细的解释了 C++为什么会变成如今（C++98/03）的模样。
+模板作为 C++中最有特色的语言特性，它堪称玄学的语法和语义，理所应当的成为初学者的梦魇。但是实际上 C++模板远没有想象的那么复杂。我们只需要换一个视角：在 C++03 的时候，模板本身就可以独立成为一门“语言”。
+
+# template function
+
+```cpp
+// 注意class关键字可以替换为typename关键字
+template <class Any>
+void Swap(Any &a, Any &b) {
+  Any temp;
+  temp = a;
+  a = b;
+  b = temp;
+}
+int x,y;
+...
+swap(x,y);
+```
+
+如上，在编译时，当遇到一个调用两个 int 引用参数时，编译器生成 swap 函数的 int 版本。
+
+为了进一步了解模板，必须理解实例化和具体化。在代码中编写函数模板并不会生成函数定义，它只是一个用于生成函数定义的方案。而当编译器发现程序调用 swap(x,y)时，会生成一个 swap(int &, int &)的实例。这种实例化被称为**隐式实例化**。
+
+现在 c++还允许显示实例化，可以直接命令编译器创建特定的实例，如 Swap<int>()。编译器看到这个声明将直接创建函数实例。
+
+```cpp
+template void Swap<int> (int, int);
+```
+
+除此之外，还可以使用显示具体化方法，让编译器不按照 swap()模板来生成函数定义。
+
+```cpp
+template <> void Swap<int> (int &, int &);
+```
+
+编译器在选择函数原型时，遵循的规则是：非模板版本 优先于 显示具体化 优先于 模板版本。
